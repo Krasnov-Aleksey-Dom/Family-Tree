@@ -1,7 +1,42 @@
 package family_tree;
 
+import family_tree.family_tree.FamilyTree;
+import family_tree.human.Gender;
+import family_tree.human.Human;
+
+import java.time.LocalDate;
+
 public class Main {
-    public static void main(String[] args) {
-        System.out.println("Hello");
+    public static void main(String[] args)  {
+        String path = "src/tree.out";
+        FamilyTree tree = testTree();
+        FileHandler fileHandler = new FileHandler();
+        fileHandler.saveFile(tree,path);
+        FamilyTree tree1 = fileHandler.loadFile(path);
+        //fileHandler.loadFile("src/tree.out");
+        System.out.println(tree1);
+
+        System.out.println(tree);
+
+    }
+    static FamilyTree testTree(){
+        FamilyTree tree = new FamilyTree();
+        Human vasya = new Human("Василий", Gender.Male, LocalDate.of(1963,12,10));
+        Human masha = new Human("Мария", Gender.Female, LocalDate.of(1963,9,15));
+        tree.add(vasya);
+        tree.add(masha);
+        tree.setWedding(vasya.getId(),masha.getId());
+
+        Human christina = new Human("Кристина",Gender.Female,LocalDate.of(1988,7,5),
+                vasya, masha);
+        Human semyon = new Human("Семен",Gender.Male,LocalDate.of(1988,7,5),
+                vasya,masha);
+        tree.add(christina);
+        tree.add(semyon);
+        Human larisa = new Human("Лариса",Gender.Female,LocalDate.of(1945,9,1));
+        larisa.addChild(vasya);
+        tree.add(larisa);
+        return tree;
+
     }
 }

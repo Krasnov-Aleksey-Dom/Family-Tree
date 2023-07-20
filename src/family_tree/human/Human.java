@@ -1,19 +1,20 @@
 package family_tree.human;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Human {
+public class Human implements Serializable {
     private long id;
     private String name;
     private Gender gender;
     private LocalDate birthData;
     private LocalDate deathData;
-    private List<Human> parents;
-    private List<Human> children;
-    private Human spouse;
+    private List<Human> parents;//список родителей
+    private List<Human> children;//список детей
+    private Human spouse;//муж или жена
 
     public Human(String name, Gender gender, LocalDate birthData, LocalDate deathData,
                  Human father, Human mother) {
@@ -40,6 +41,7 @@ public class Human {
                  Human father, Human mather){
         this(name,gender,birthData,null,father,mather);
     }
+
     public boolean addChild(Human child){
         if(!children.contains(child)){
             children.add(child);
@@ -47,6 +49,7 @@ public class Human {
         }
         return false;
     }
+
     public boolean addParent(Human parent){
         if(!parents.contains(parent)){
             parents.add(parent);
@@ -54,6 +57,7 @@ public class Human {
         }
         return false;
     }
+
     public Human getFather(){
         for (Human parent:parents){
             if(parent.getGender()==Gender.Male){
@@ -71,6 +75,7 @@ public class Human {
         }
         return null;
     }
+
     public  int getAge(){
         if(deathData==null){
             return getPeriod(birthData,LocalDate.now());
@@ -78,10 +83,13 @@ public class Human {
             return getPeriod(birthData,deathData);
         }
     }
+
     private int getPeriod(LocalDate birthData, LocalDate deathData){
+        // Вычисление возраста
         Period diff =Period.between(birthData,deathData);
         return diff.getYears();
     }
+
 
     public void setSpouse(Human spouse) {
         this.spouse = spouse;
@@ -110,6 +118,13 @@ public class Human {
     public LocalDate getDeathData() {
         return deathData;
     }
+    public List<Human> getParents(){
+        return parents;
+    }
+
+    public List<Human> getChildren(){
+        return children;
+    }
 
     public void setBirthData(LocalDate birthData) {
         this.birthData = birthData;
@@ -121,7 +136,7 @@ public class Human {
 
     @Override
     public String toString() {
-        return getInfo;
+        return getInfo();
     }
     public String getInfo(){
         StringBuilder sb = new StringBuilder();
@@ -144,6 +159,7 @@ public class Human {
         return sb.toString();
     }
     public String getSpouseInfo(){
+        // имя супруга(и)
         String res = "супруг(а): ";
         if (spouse == null){
             res += "нет";
